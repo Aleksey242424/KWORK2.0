@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Admin</title>
+</head>
+<body>
+    <form action="{{url_for('admin.login')}}" method="post" novalidate>
+        {{form.hidden_tag()}}
+        {{form.csrf_token()}}
+        {{form.name}}
+        {{form.password}}
+        <input type="submit" value="sign in">
+    </form>
+    {%with messages = get_flashed_messages()%}
+    {{messages[0]}}
+    {%endwith%}
+</body>
+</html>

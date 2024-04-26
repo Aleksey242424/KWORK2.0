@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Data</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" defer></script>
+</head>
+<body>
+    <a href="{{url_for('admin.main')}}">tables</a> > 
+    <a href="{{url_for('admin.table',tablename=tablename)}}">{{tablename}}</a>
+    <form action="{{url_for('admin.get_data',tablename=tablename,instance_id=instance_id)}}" method="post" novalidate id="main_form">
+        {{form.hidden_tag()}}
+        {{form.csrf_token}}
+        {%for field in form%}
+            {%if field.name != "csrf_token"%}
+                {%if field.name != "submit" and field.name != "title_service_id"%}
+                {{field.label}}<br>
+                {{field(value=form.values[field.name])}}<br><br>
+                {%else%}
+                {{field}}
+                {%endif%}
+            {%endif%}
+        {%endfor%}
+        <div id="wrape_select">
+
+        </div><br>
+        <input id="submit" name="submit" type="submit" value="update">
+    </form><br>
+    <form action="{{url_for('admin.get_data',tablename=tablename,instance_id=instance_id)}}" method="post" novalidate>
+        <input type="submit" value="delete" name="delete">
+    </form>
+    <script>
+        function wrapeSelect(select){
+            console.log(select.value)
+        }
+        function getWrapeSelect(select){
+            let dataSelect = select.value
+            $.ajax({
+                    url: "{{url_for('admin.get_wrape_form',tablename=tablename)}}",
+                    data: {'data':dataSelect},
+                    type: 'GET',
+                    success: function(response){
+                        let resData = response.form_name
+                        if ("{{tablename}}"=="service"){
+                        let data = document.getElementById("wrape_select")
+                        data.innerHTML = response.wrape_select
+                    }
+                    },
+                    error: function(error){
+                        console.log(error);
+                    }
+                });
+        }
+    </script>
+</body>
+</html>

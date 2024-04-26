@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table</title>
+</head>
+<body>
+    <a href="{{url_for('admin.main')}}">tables</a>
+
+    <div>
+        <div>
+            {%for column in  columns%}
+            {{column}}
+            {%endfor%}
+        </div>
+        <div>
+            {%for wrape_data in preview_data%}
+            <a href="{{url_for('admin.get_data',tablename=tablename,instance_id=wrape_data[0])}}">
+                {%for data in wrape_data%}
+                {{data}}
+                {%endfor%}
+            </a><br><br>
+            {%endfor%}
+        </div>
+    </div>
+    {%with messages = get_flashed_messages()%}
+    {%if messages != []%}
+    <script>alert("{{messages[0]}}")</script>
+    {%endif%}
+    {%endwith%}
+    <a href="{{url_for('admin.add',tablename=tablename)}}">add</a>
+    
+</body>
+</html>

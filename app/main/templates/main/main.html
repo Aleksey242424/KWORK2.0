@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main</title>
+</head>
+<body>
+    {%if current_user.is_customer %}
+    <a href="{{url_for('profile.customer_profile')}}">profile</a>
+    {%else%}
+    <a href="{{url_for('profile.executor_profile')}}">profile</a>
+    {%endif%}
+</body>
+</html>
