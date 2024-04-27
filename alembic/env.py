@@ -8,7 +8,6 @@ from alembic import context
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
-
 config.set_main_option("sqlalchemy.url","postgresql+psycopg2://postgres:123@localhost:5432/kwork_2_0")
 
 # Interpret the config file for Python logging.
@@ -20,7 +19,7 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-from app.system_db.models import Admin
+from app.system_db.models import Users
 from app.system_db import Base
 target_metadata = Base.metadata
 

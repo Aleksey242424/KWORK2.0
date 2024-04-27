@@ -29,9 +29,7 @@ class TitleServiceCRUD(BasicCRUD):
     @staticmethod
     def get(id):
         with db_session() as session:
-            print(id) 
             title_service = session.query(TitleService).filter_by(id=id).scalar()
-            print(title_service)
             return title_service
         
     @staticmethod

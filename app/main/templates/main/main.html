@@ -11,5 +11,9 @@
     {%else%}
     <a href="{{url_for('profile.executor_profile')}}">profile</a>
     {%endif%}
+    {%for product in products%}
+    {{product.title}}
+    <img src="{{url_for('static',filename=product.photo)}}" width="100px" height="100px"><br>
+    {%endfor%}
 </body>
 </html>

@@ -37,13 +37,9 @@ class CustomUpdateForm:
                     fk = v[1].foreign_keys.copy()
                     fk_table= f"{fk.pop().column.table}"
                     fk_data = controller_get_fk_data(Config.MODELS_CRUD.get(fk_list[0],None))
-                    print(1,"count elem:",len(fk_list))
-                    print(2,"fk_list:",fk_list)
                     slice_copy = [table for table in fk_list if table != 'type_service']
                     slice_copy.insert(0,tablename)
-                    print(3,"slice_copy:",slice_copy)
-                    preview_data = controller_get_fk_preview(crud_models=[crud_model for crud_model in controller_get_crud_model(slice_copy)],last_crud_model=Config.MODELS_CRUD.get(f'type_service'),id=instance_id,tablenames=fk_list)
-                    print(5,"fk_data:",fk_data)
+                    preview_data = controller_get_fk_preview(crud_models=[crud_model for crud_model in controller_get_crud_model(slice_copy)],last_crud_model=Config.MODELS_CRUD.get(f'type_service'),id=instance_id,tablenames=fk_list,tablename = tablename)
                     input_obj = SelectField(id=get_foreign_tablename(fk_table),label=fk_table,render_kw={"onchange":"getWrapeSelect(this)"},validators=validators,choices=[(data[0],f'{data[1]}') for data in parse_data_fk(tablename,fk_data)],default=preview_data.id)
                     del fk_list
                 elif len(fk_list) == 1:

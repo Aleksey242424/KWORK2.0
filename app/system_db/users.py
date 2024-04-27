@@ -26,9 +26,18 @@ class UsersCRUD(BasicCRUD):
     @staticmethod
     def update(id,**params):
         with db_session() as session:
-            print(params)
             session.query(Users).filter_by(id=id).update({"name":params.get("name"),"email":params.get("email"),"phone":params.get("phone"),"hash_password":generate_password_hash(params.get("hash_password"))})
             db_session.commit()
+
+    @staticmethod
+    def update_from_profile(id,**params):
+        with db_session() as session:
+            try:
+                session.query(Users).filter_by(id=id).update({"name":params.get("name"),"email":params.get("email"),"phone":params.get("phone")})
+                db_session.commit()
+                return True
+            except IntegrityError:
+                return
 
     @staticmethod
     def get(id):

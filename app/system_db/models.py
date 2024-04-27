@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Mapped,mapped_column
 from app.system_db import Base
-from sqlalchemy.types import String,Integer
+from sqlalchemy.types import String,Integer,VARCHAR
 from sqlalchemy import ForeignKey
 
 class Admin(Base):
@@ -48,9 +48,11 @@ class Users(Base):
 
 class Product(Base):
     __tablename__ = "product"
+    list_display = ["title","price","user"]
     id:Mapped[int] = mapped_column(primary_key=True)
     title:Mapped[str] = mapped_column(String(20))
-    info:Mapped[str] = mapped_column(String(100))
+    info:Mapped[str] = mapped_column(VARCHAR(1000),nullable=True)
     photo:Mapped[str] = mapped_column(String(250))
     price:Mapped[int] = mapped_column(Integer)
-    user:Mapped[str] = mapped_column(ForeignKey("users.id",ondelete="CASCADE",onupdate="CASCADE"))
+    user:Mapped[int] = mapped_column(ForeignKey("users.id",ondelete="CASCADE",onupdate="CASCADE"))
+    service:Mapped[int] = mapped_column(ForeignKey("service.id",ondelete="CASCADE",onupdate="CASCADE"))

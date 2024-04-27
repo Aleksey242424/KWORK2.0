@@ -28,8 +28,10 @@ def controller_get_crud_model(tablenames:list):
 
 
 
-def controller_get_fk_preview(crud_models,last_crud_model,id,tablenames):
-    tablenames[0] = "service"
+def controller_get_fk_preview(crud_models,last_crud_model,id,tablenames,tablename):
+    if "title_service" in tablenames and tablename != "title_service":
+        tablenames[0] = "service"
+
     if len(crud_models) > 1:
         for i in range(len(crud_models)):
             print(tablenames[i],crud_models)
@@ -49,9 +51,8 @@ def controller_get_fk_preview(crud_models,last_crud_model,id,tablenames):
             fk_id = crud_models[0].get_fk_id(id)
             return last_crud_model.get(fk_id)
 
-    print(fk_id)
-    print(last_crud_model.get(fk_id))
     return last_crud_model.get(fk_id)
+
     
 
 def parse_data_fk(tablename,obj):

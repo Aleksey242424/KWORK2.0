@@ -5,6 +5,7 @@ from app.system_db.title_service import TitleServiceCRUD
 from app.system_db.service import ServiceCRUD
 from app.system_db.users import UsersCRUD
 from os import urandom
+from os import path
 class Config:
 
     TABLE_COLUMNS = {
@@ -25,3 +26,4 @@ class Config:
         
     SECRET_KEY = urandom(20)
     DEBUG = True
+    MEDIA_DIR = "media/product"

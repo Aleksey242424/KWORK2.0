@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Product</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" defer></script>
+</head>
+<body>
+    <form action="{{url_for('main.create_product')}}" method="post" novalidate enctype="multipart/form-data">
+        {{form.hidden_tag()}}
+        {{form.csrf_token()}}
+        {{form.title()}}
+        {{form.info()}}
+        {{form.photo()}}
+        {{form.price()}}
+        {{form.type_service()}}
+        <div id="wrape_select" style="display: inline;">
+            {{form.title_service()}}
+        </div>
+        <div id="wrape_select_service" style="display: inline;">
+            {{form.wrape_select_service()}}
+        </div><br>
+
+        <input type="submit" value="create">
+    </form>
+    {%with messages = get_flashed_messages()%}
+    {{messages[0]}}
+    {%endwith%}
+    <script>
+        function getWrapeSelect(select){
+            let dataSelect = select.value
+            $.ajax({
+                    url: "{{url_for('main.get_wrape_form')}}",
+                    data: {'data':dataSelect},
+                    type: 'GET',
+                    success: function(response){
+                        let wrape_select = document.getElementById("wrape_select")
+                        wrape_select.innerHTML = response.wrape_select
+                        let wrape_select_service = document.getElementById("wrape_select_service")
+                        wrape_select_service.innerHTML = response.wrape_select_service
+                    },
+                    error: function(error){
+                        console.log(error);
+                    }
+                });
+        }
+        function getWrapeSelectService(select){
+            let dataSelect = select.value
+            $.ajax({
+                    url: "{{url_for('main.get_wrape_service_form')}}",
+                    data: {'data':dataSelect},
+                    type: 'GET',
+                    success: function(response){
+                        let data = document.getElementById("wrape_select_service")
+                        data.innerHTML = response.wrape_select_service
+                    },
+                    error: function(error){
+                        console.log(error);
+                    }
+                });
+        }
+    </script>
+</body>
+</html>

@@ -23,8 +23,6 @@ class TypeServiceCRUD(BasicCRUD):
     def get(id):
         with db_session() as session:
             type_service = session.query(TypeService).filter_by(id=id).scalar()
-            print(type_service)
-            print(id)
             return type_service
         
     @staticmethod
@@ -32,6 +30,13 @@ class TypeServiceCRUD(BasicCRUD):
         with db_session() as session:
             fk_data = session.query(TypeService).all()
             return fk_data
+        
+    @staticmethod
+    def get_id_by_title_service(id):
+        with db_session() as session:
+            fk_data = session.query(TypeService.id).filter_by(id=id).scalar()
+            return fk_data
+        
 
     
     @staticmethod

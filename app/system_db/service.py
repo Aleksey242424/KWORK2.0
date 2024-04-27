@@ -32,11 +32,23 @@ class ServiceCRUD(BasicCRUD):
             service = session.query(Service).filter_by(id=id).scalar()
             return service
         
-    @staticmethod
+    """@staticmethod
     def get_fk_data():
         with db_session() as session:
             fk_data = session.query(Service).all()
+            return fk_data"""
+        
+    @staticmethod
+    def get_fk_data(id):
+        with db_session() as session:
+            fk_data = session.query(Service).filter_by(title_service_id = id).all()
             return fk_data
+        
+    @staticmethod
+    def get_first_data_by_fk(id):
+        with db_session() as session:
+            fk_data = session.query(Service).filter_by(title_service_id = id).one()
+            return fk_data[0]
 
     
     @staticmethod

@@ -22,9 +22,7 @@
                 {%endif%}
             {%endif%}
         {%endfor%}
-        <div id="wrape_select">
-
-        </div><br>
+        <div id="wrape_select"></div><br>
         <input id="submit" name="submit" type="submit" value="update">
     </form><br>
     <form action="{{url_for('admin.get_data',tablename=tablename,instance_id=instance_id)}}" method="post" novalidate>
