@@ -46,7 +46,7 @@ class CustomUpdateForm:
                     fk = v[1].foreign_keys.copy()
                     fk_table= f"{fk.pop().column.table}"
                     fk_data = controller_get_fk_data(Config.MODELS_CRUD.get(fk_table,None))
-                    preview_data = controller_get_fk_preview(crud_models=[crud_model for crud_model in controller_get_crud_model([tablename])],last_crud_model=Config.MODELS_CRUD.get("type_service"),id=instance_id,tablenames=fk_list)
+                    preview_data = controller_get_fk_preview(crud_models=[crud_model for crud_model in controller_get_crud_model([tablename])],last_crud_model=Config.MODELS_CRUD.get("type_service"),id=instance_id,tablenames=fk_list,tablename = tablename)
                     input_obj = SelectField(label=k,validators=validators,choices=[data for data in parse_data_fk(fk_table,fk_data)],default=preview_data.id)
                     del fk_list
                 else:
@@ -80,7 +80,7 @@ class CustomAddForm:
                 if len(fk_list) > 1:
                     fk = v[1].foreign_keys.copy()
                     fk_table= f"{fk.pop().column.table}"
-                    fk_data = controller_get_fk_data(Config.MODELS_CRUD.get(fk_list[0],None))
+                    fk_data = controller_get_fk_data(Config.MODELS_CRUD.get("type_service"))
                     input_obj = SelectField(id=get_foreign_tablename(fk_table),label=fk_table,render_kw={"onchange":"getWrapeSelect(this)"},validators=validators,choices=[(data[0],f'{data[1]}') for data in parse_data_fk(fk_list[0],fk_data)])
                 else:
                     fk = v[1].foreign_keys.copy()

@@ -29,5 +29,7 @@ def register():
                 return redirect(url_for("main.main_page"))
             flash("Пользователь с такими данными уже зарегестрирован")
             return redirect(url_for("auth.register"))
+        if form.errors:
+            flash("Данные не коректны")
         return render_template("auth/register.html",form=form)
     return redirect(url_for("main.main_page"))

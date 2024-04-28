@@ -4,18 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='css/auth.css')}}">
 </head>
 <body>
-    <form action="{{url_for('auth.login')}}" method="post" novalidate>
-        {{form.csrf_token()}}
-        {{form.hidden_tag()}}
-        {{form.name()}}
-        {{form.hash_password()}}
-        <input type="submit" value="login">
-    </form>
-    {%with messages = get_flashed_messages()%}
-    {{messages[0]}}
-    {%endwith%}
-    <a href="{{url_for('auth.register')}}">register</a>
+    <div class="main">
+        <form action="{{url_for('auth.login')}}" method="post" novalidate>
+            {{form.csrf_token()}}
+            {{form.hidden_tag()}}
+            {{form.name()}}
+            {{form.hash_password()}}
+            <input type="submit" value="login">
+            {%with messages = get_flashed_messages()%}
+            {{messages[0]}}
+            {%endwith%}
+            <a href="{{url_for('auth.register')}}">register</a>
+        </form>
+    </div>
 </body>
 </html>

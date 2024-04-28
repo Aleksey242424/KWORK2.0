@@ -11,6 +11,18 @@ class CreateProductForm(FlaskForm):
     info = TextAreaField(label="info",render_kw={"placeholder":"description"},validators=[DataRequired(),Length(0,100)])
     price = IntegerField(label="price",render_kw={"placeholder":"price"},validators=[DataRequired()])
     photo = FileField(label="Загрузить фото")
+    type_service_id = TypeServiceCRUD.get_first_id()[0]
+    title_service_id = TitleServiceCRUD.get_first_id()[0]
     type_service = SelectField(label='type_service',render_kw={"onchange":"getWrapeSelect(this)"},choices=[(data.id,data.type_service) for data in TypeServiceCRUD.get_fk_data()])
-    title_service = SelectField(label='title_service',render_kw={"onchange":"getWrapeSelectService(this)"},choices=[(data.id,data.title_service) for data in TitleServiceCRUD.get_data_by_fk(1)])
-    wrape_select_service = SelectField(label='service',choices=[(data.id,data.service) for data in ServiceCRUD.get_fk_data(3)])
+    title_service = SelectField(label='title_service',render_kw={"onchange":"getWrapeSelectService(this)"},choices=[(data.id,data.title_service) for data in TitleServiceCRUD.get_data_by_fk(type_service_id)])
+    wrape_select_service = SelectField(label='service',choices=[(data.id,data.service) for data in ServiceCRUD.get_fk_data(title_service_id)])
+
+
+class FilterForm(FlaskForm):
+    type_service_id = TypeServiceCRUD.get_first_id()[0]
+    title_service_id = TitleServiceCRUD.get_first_id()[0]
+    type_service = SelectField(label='type_service',render_kw={"onchange":"getWrapeSelect(this)"},choices=[(data.id,data.type_service) for data in TypeServiceCRUD.get_fk_data()])
+    title_service = SelectField(label='title_service',render_kw={"onchange":"getWrapeSelectService(this)"},choices=[(data.id,data.title_service) for data in TitleServiceCRUD.get_data_by_fk(type_service_id)])
+    wrape_select_service = SelectField(label='service',choices=[(data.id,data.service) for data in ServiceCRUD.get_fk_data(title_service_id)])
+    start_price = IntegerField(label="price",render_kw={"placeholder":"от","oninput":"generateProduct()"})
+    end_price = IntegerField(label="price",render_kw={"placeholder":"до","oninput":"generateProduct()"})

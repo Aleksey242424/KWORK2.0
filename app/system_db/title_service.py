@@ -77,3 +77,10 @@ class TitleServiceCRUD(BasicCRUD):
             title_services = session.query(TitleService).filter_by(type_service_id=fk_id).all()
             return title_services
     
+    @staticmethod
+    def get_first_id():
+        with db_session() as session:
+            title_service = session.query(TitleService.id).first()
+            return title_service
+    
+    

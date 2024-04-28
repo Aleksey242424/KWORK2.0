@@ -32,6 +32,12 @@ class ServiceCRUD(BasicCRUD):
             service = session.query(Service).filter_by(id=id).scalar()
             return service
         
+    @staticmethod
+    def get_first_id():
+        with db_session() as session:
+            service_id = session.query(Service.id).first()
+            return service_id
+        
     """@staticmethod
     def get_fk_data():
         with db_session() as session:
@@ -81,6 +87,7 @@ class ServiceCRUD(BasicCRUD):
         with db_session() as session:
             session.query(Service).filter_by(id=id).delete()
             session.commit()
+
 
     
     

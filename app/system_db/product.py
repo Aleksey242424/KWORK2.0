@@ -124,5 +124,18 @@ class ProductCRUD(BasicCRUD):
             user = session.query(Product).filter_by(id=id).scalar()
             return user.phone
 
+    @staticmethod
+    def get_product_by_price_and_service(service_id,start_price="",end_price=""):
+        with db_session() as session:
+            print(service_id)
+            if end_price and start_price:
+                product = session.query(Product).filter(Product.price>=start_price,Product.price<=end_price,Product.service==service_id).all()
+            elif end_price:
+                product = session.query(Product).filter(Product.price<=end_price,Product.service==service_id).all()
+            elif start_price:
+                product = session.query(Product).filter(Product.price>=start_price,Product.service==service_id).all()
+            else:
+                product = session.query(Product).filter(Product.service==service_id).all()
+            return product
 
     

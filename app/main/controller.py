@@ -13,13 +13,28 @@ def generate_select_title_service_html(parent_id):
     html_list = f"{html_list}</select>"
 
     wrape_data = generate_select_service_html(wrape_id)
-    return html_list,wrape_data 
+
+    return html_list,wrape_data[0],wrape_data[1]
 
 def generate_select_service_html(parent_id):
     from app.system_db.service import ServiceCRUD
-    html_list = '<select id="service_id" name="wrape_select_service" required>'
-    for elem in ServiceCRUD.get_fk_data(parent_id):
-        option = f"<option value='{elem.id}'>{elem.service}</option>"
+    html_list = '<select id="wrape_select_service" name="wrape_select_service" required>'
+    services = ServiceCRUD.get_fk_data(parent_id)
+    for i in range(len(services)):
+        option = f"<option value='{services[i].id}'>{services[i].service}</option>"
         html_list = f"{html_list}{option}"
     html_list = f"{html_list}</select>"
-    return html_list
+    try:
+        id = getattr(services[0],"id",None)
+    except IndexError:
+        id = None
+    return html_list,id
+
+def generate_product_by_price_and_service_html(service_id,start_price="",end_price=""):
+    from app.system_db.product import ProductCRUD
+    products = ProductCRUD.get_product_by_price_and_service(service_id=service_id,start_price=start_price,end_price=end_price)
+    product_html = "<div>"
+    for product in products:
+        product_html = f"{product_html}{product.title}:{product.price}"
+    product_html = f"{product_html}</div>"
+    return product_html

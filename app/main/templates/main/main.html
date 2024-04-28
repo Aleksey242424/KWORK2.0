@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Main</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" defer></script>
 </head>
 <body>
     {%if current_user.is_customer %}
@@ -11,9 +12,81 @@
     {%else%}
     <a href="{{url_for('profile.executor_profile')}}">profile</a>
     {%endif%}
-    {%for product in products%}
-    {{product.title}}
-    <img src="{{url_for('static',filename=product.photo)}}" width="100px" height="100px"><br>
-    {%endfor%}
+    <div class="form">
+        {{form.csrf_token()}}
+        {{form.hidden_tag()}}
+        {{form.type_service()}}
+        <div id="wrape_select" style="display: inline;">
+            {{form.title_service()}}
+        </div>
+        <div id="wrape_select_service" style="display: inline;">
+            {{form.wrape_select_service()}}
+        </div><br>
+        {{form.start_price()}}
+        {{form.end_price()}}
+    </div>
+    <div id="products_container">
+        {%for product in products%}
+        {{product.title}}
+        <img src="{{url_for('static',filename=product.photo)}}" width="100px" height="100px"><br>
+        {%endfor%}
+    </div>
+    <script>
+        const startPrice = document.getElementById("start_price")
+        const endPrice = document.getElementById("end_price")
+        const service = document.getElementById("wrape_select_service")
+        function generateProduct(select){
+            $.ajax({
+                    url: "{{url_for('main.get_product_by_price')}}",
+                    data: {'start_price':startPrice.value,'end_price':endPrice.value},
+                    type: 'GET',
+                    success: function(response){
+                        const productsContainer = document.getElementById("products_container")
+                        productsContainer.innerHTML = response.products_html
+                        
+                    },
+                    error: function(error){
+                        console.log(error);
+                    }
+                });
+        }
+
+        function getWrapeSelect(select){
+            let dataSelect = select.value
+            $.ajax({
+                    url: "{{url_for('main.main_get_wrape_form')}}",
+                    data: {'data':dataSelect},
+                    type: 'GET',
+                    success: function(response){
+                        let wrape_select = document.getElementById("wrape_select")
+                        wrape_select.innerHTML = response.wrape_select
+                        let wrape_select_service = document.getElementById("wrape_select_service")
+                        wrape_select_service.innerHTML = response.wrape_select_service
+                        const productsContainer = document.getElementById("products_container")
+                        productsContainer.innerHTML = response.products_html
+                    },
+                    error: function(error){
+                        console.log(error);
+                    }
+                });
+        }
+        function getWrapeSelectService(select){
+            let dataSelect = select.value
+            $.ajax({
+                    url: "{{url_for('main.main_get_wrape_service_form')}}",
+                    data: {'data':dataSelect},
+                    type: 'GET',
+                    success: function(response){
+                        let data = document.getElementById("wrape_select_service")
+                        data.innerHTML = response.wrape_select_service
+                        const productsContainer = document.getElementById("products_container")
+                        productsContainer.innerHTML = response.products_html
+                    },
+                    error: function(error){
+                        console.log(error);
+                    }
+                });
+        }
+    </script>
 </body>
 </html>
