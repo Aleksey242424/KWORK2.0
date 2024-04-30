@@ -8,7 +8,8 @@ from alembic import context
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
-config.set_main_option("sqlalchemy.url","postgresql+psycopg2://postgres:123@localhost:5432/kwork_2_0")
+from app.system_db import DB_CONN
+config.set_main_option("sqlalchemy.url",DB_CONN)
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
