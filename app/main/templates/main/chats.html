@@ -1,0 +1,23 @@
+{%extends 'main/basic.html'%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {%block head%}
+    <title>Chats</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='css/chats.css')}}">
+    {%endblock%}
+</head>
+<body>
+    {%block header%}
+    <div class="main">
+        {%for chat in chats%}
+        <a href="{{url_for('main.message',chat_id=chat[0].id)}}">
+            <div class="chat">
+                {{chat[1].name}}
+            </div>
+        </a>
+        {%endfor%}
+    </div>
+    {%endblock%}
+</body>
+</html>

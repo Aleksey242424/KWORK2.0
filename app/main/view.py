@@ -10,6 +10,7 @@ from app.system_db.type_service import TypeServiceCRUD
 from app.system_db.title_service import TitleServiceCRUD
 from app.system_db.service import ServiceCRUD
 from app.system_db.message import MessageCRUD
+from app.system_db.chat import ChatCRUD
 from sqlalchemy.exc import DataError
 from app.redis.cache_history import add_product_in_history
 
@@ -58,17 +59,40 @@ def product(id):
         return render_template("main/product.html",current_product=current_product,current_user=current_user)
     return redirect(url_for("auth.login"))
 
-@main.route("/message/")
-def message():
-    user_  = request.args.get("user_")
-    user = UsersCRUD.get(session.get("id"))
-    form = ChatMessageForm()
-    if form.validate_on_submit():
-        message = form.message.data
-        MessageCRUD.add(user_=user_,user=user,message=message)
-        return redirect(url_for("main.message",user_=user_))
-    return render_template("main/message.html")
+@main.route("/message/",methods={"GET","POST"})
+def before_message():
+    if session.get("id"):
+        user_id = request.args.get("user_id")
+        ChatCRUD.add(user_id,session.get("id"))
+        return redirect(url_for("main.message",chat_id=ChatCRUD.get(user_id,session.get("id")).id))
+    return redirect(url_for("auth.login"))
 
+@main.route("/message/<chat_id>/",methods={"GET","POST"})
+def message(chat_id):
+    if session.get("id"):
+        chat = ChatCRUD.get_by_id(chat_id)
+        current_user = UsersCRUD.get(session.get("id"))
+        if current_user.is_customer:
+            user_id = chat.user_
+        else:
+            user_id = chat.user
+        form = ChatMessageForm()
+        messages = MessageCRUD.get_all(chat.id)
+        return render_template("main/message.html",current_user=current_user,form=form,user_id=user_id,chat_id=chat_id,messages=messages)
+    return redirect(url_for("auth.login"))
+
+
+
+@main.route("/chats/")
+def chats():
+    if session.get("id"):
+        current_user = UsersCRUD.get(session.get("id"))
+        if current_user.is_customer:
+            chats = ChatCRUD.get_chat_for_customer(session.get("id"))
+        else:
+            chats = ChatCRUD.get_chat_for_executor(session.get("id"))
+        return render_template("main/chats.html",chats=chats,current_user=current_user)
+    return redirect(url_for("auth.login"))
 
 
 @main.route("/create_product/get_wrape_form/")
@@ -76,6 +100,7 @@ def get_wrape_form():
     parent_id = request.args.get("data")
     select = generate_select_title_service_html(parent_id)
     return {"wrape_select":f'{select[0]}',"wrape_select_service":f'{select[1]}'}
+
 
 
 @main.route("/create_product/get_wrape_title_service_form/")

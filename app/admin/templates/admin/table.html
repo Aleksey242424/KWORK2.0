@@ -4,24 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Table</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='css/table.css')}}">
 </head>
 <body>
-    <a href="{{url_for('admin.main')}}">tables</a>
+    <a href="{{url_for('admin.main')}}">> tables</a>
 
     <div>
         <div>
-            {%for column in  columns%}
-            {{column}}
-            {%endfor%}
-        </div>
-        <div>
-            {%for wrape_data in preview_data%}
-            <a href="{{url_for('admin.get_data',tablename=tablename,instance_id=wrape_data[0])}}">
-                {%for data in wrape_data%}
-                {{data}}
-                {%endfor%}
-            </a><br><br>
-            {%endfor%}
+            <table>
+                <tr>
+                    {%for column in  columns%}
+                        <td style="color: white;">{{column}}</td>
+                    {%endfor%}
+                </tr>
+                
+                    {%for wrape_data in preview_data%}
+                    <tr>
+                            {%for data in wrape_data%}
+                            <td><a href="{{url_for('admin.get_data',tablename=tablename,instance_id=wrape_data[0])}}">{{data}}</a></td>
+                            {%endfor%}
+                        
+                    </tr>
+                    {%endfor%}
+                
+            </table>
         </div>
     </div>
     {%with messages = get_flashed_messages()%}
@@ -29,7 +35,7 @@
     <script>alert("{{messages[0]}}")</script>
     {%endif%}
     {%endwith%}
-    <a href="{{url_for('admin.add',tablename=tablename)}}">add</a>
+    <a href="{{url_for('admin.add',tablename=tablename)}}" class="add">add</a>
     
 </body>
 </html>

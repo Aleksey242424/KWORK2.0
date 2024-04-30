@@ -1,0 +1,22 @@
+*{box-sizing: border-box;}
+html,body{
+    margin: 0;
+    width: 100%;
+    height: 100%;
+}
+a{
+    text-decoration: none;
+    color: black;
+}
+
+body{
+    background-color: #B80028;
+}
+.main{
+    margin: 0 auto;
+    width: 70%;
+    background-color: #F2F5ED;
+    padding-top: 20px;
+    padding-bottom: 100px;
+    min-height: 800px;
+}

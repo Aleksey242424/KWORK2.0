@@ -5,21 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add</title>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" defer></script>
+    <link rel="stylesheet" href="{{url_for('static',filename='css/get_data.css')}}">
 </head>
 <body>
-    <a href="{{url_for('admin.main')}}">tables</a> > 
-    <a href="{{url_for('admin.table',tablename=tablename)}}">{{tablename}}</a>
-    <form action="{{url_for('admin.add',tablename=tablename)}}" method="post" novalidate>
-        {{form.hidden_tag()}}
-        {{form.csrf_token()}}
-        {%for field in form%}
-            {%if field.name != "csrf_token"%}
-                {{field.label}}<br>
-                {{field}}<br><br>
-            {%endif%}
-        {%endfor%}
-        <div id="wrape_select"></div>
-    </form>
+    <div class="main">
+        <a href="{{url_for('admin.main')}}">tables</a> > 
+        <a href="{{url_for('admin.table',tablename=tablename)}}">{{tablename}}</a>
+        <form action="{{url_for('admin.add',tablename=tablename)}}" method="post" novalidate>
+            {{form.hidden_tag()}}
+            {{form.csrf_token()}}
+            {%for field in form%}
+                {%if field.name != "csrf_token"%}
+                    {{field.label}}<br>
+                    {{field}}<br><br>
+                {%endif%}
+            {%endfor%}
+            <div id="wrape_select"></div>
+        </form>
+    </div>
     <script>
         function wrapeSelect(select){
             console.log(select.value)

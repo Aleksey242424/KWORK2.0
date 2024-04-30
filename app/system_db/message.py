@@ -1,8 +1,9 @@
-from app.system_db.models import Message
+from app.system_db.models import Message,Chat,Users
 from app.system_db import db_session,Base
 from sqlalchemy import text
 from pydantic import validate_call
 from app.system_db.basic import BasicCRUD
+from app.system_db.chat import ChatCRUD
 
 class MessageCRUD(BasicCRUD):
     @staticmethod
@@ -10,15 +11,10 @@ class MessageCRUD(BasicCRUD):
         with db_session() as session:
             session.add(Message(
                 message = params.get("message"),
-                user_ = params.get("user_"),
-                chat = params.get("user")
+                chat_id=params.get("chat_id"),
+                user=params.get("user_id")
                 ))
-            db_session.commit()
-
-    @staticmethod
-    def update(id,**params):
-        with db_session() as session:
-            session.query(Message).filter_by(id=id).update({"title_service":params.get("title_service"),"type_service_id":params.get("type_service_id")})
+            
             db_session.commit()
 
     @staticmethod
@@ -26,12 +22,30 @@ class MessageCRUD(BasicCRUD):
         with db_session() as session:
             fk_id = session.query(Message.type_service_id).filter(Message.id==id).scalar()
             return fk_id
+        
+    @staticmethod
+    def get_last():
+        with db_session() as session:
+            fk_id = session.query(Message).order_by(Message).scalar()
+            return fk_id
 
     @staticmethod
     def get(id):
         with db_session() as session:
-            title_service = session.query(Message).filter_by(id=id).scalar()
-            return title_service
+            message = session.query(Message).filter_by(id=id).scalar()
+            return message
+        
+    @staticmethod
+    def get_all(chat_id):
+        with db_session() as session:
+            messages = session.query(Message).filter(Message.chat_id==chat_id).all()
+            return messages
+        
+    @staticmethod
+    def get_all_messages(user_,user_id):
+        with db_session() as session:
+            messages = session.query(Message).filter_by(user_=user_,user=user_id).all()
+            return messages
         
     @staticmethod
     def get_fk_data():

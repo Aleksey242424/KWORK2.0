@@ -12,6 +12,12 @@
         {%if current_user.is_customer %}
         <div>
             <a href="{{url_for('profile.customer_profile')}}">profile</a>
+            {%if request.path != '/'%}
+            <a href="{{url_for('main.main_page')}}">main</a>
+            {%endif%}
+            {%if request.path != '/chats/'%}
+            <a href="{{url_for('main.chats')}}">chat</a>
+            {%endif%}
         </div>
         {%else%}
         <div>
@@ -23,6 +29,9 @@
             {%endif%}
             {%if request.path != '/'%}
             <a href="{{url_for('main.main_page')}}">main</a>
+            {%endif%}
+            {%if request.path != '/chats/'%}
+            <a href="{{url_for('main.chats')}}">chat</a>
             {%endif%}
         </div>
         {%endif%}

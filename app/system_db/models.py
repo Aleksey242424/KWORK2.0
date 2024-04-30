@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Mapped,mapped_column
 from app.system_db import Base
 from sqlalchemy.types import String,Integer,VARCHAR
-from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey,UniqueConstraint
 
 class Admin(Base):
     __tablename__ = 'admin'
@@ -9,7 +9,7 @@ class Admin(Base):
     list_display работает по томуже принципу что и одноимённый атрибут в Django.
     Не сущеситвующие колонки будут проигнорируемы,связаные данные не поддерживает для вывода
     """
-    list_display = ["username","hash_password"]
+    list_display = ["id","username","hash_password"]
 
     id:Mapped[int] = mapped_column(primary_key=True)
     username:Mapped[str] = mapped_column(String(50),unique=True)
@@ -23,21 +23,21 @@ class TypeService(Base):
 
 class TitleService(Base):
     __tablename__ = "title_service"
-    list_display = ["title_service"]
+    list_display = ["title_service","type_service_id"]
     id:Mapped[int] = mapped_column(primary_key=True)
     title_service:Mapped[str] = mapped_column(String(90),unique=True)
     type_service_id:Mapped[int] = mapped_column(ForeignKey("type_service.id",ondelete="CASCADE",onupdate="CASCADE"))
 
 class Service(Base):
     __tablename__ = "service"
-    list_display = ["service"]
+    list_display = ["service","title_service_id"]
     id:Mapped[int] = mapped_column(primary_key=True)
     service:Mapped[str] = mapped_column(String(90),unique=True)
     title_service_id:Mapped[int] = mapped_column(ForeignKey("title_service.id",ondelete="CASCADE",onupdate="CASCADE"))
 
 class Users(Base):
     __tablename__ = 'users'
-    list_display = ["name","phone","email","is_customer"]
+    list_display = ["id","name","phone","email","is_customer"]
     id:Mapped[int] = mapped_column(primary_key=True)
     name:Mapped[str] = mapped_column(String(30),unique=True)
     hash_password:Mapped[str] = mapped_column(String(300))
@@ -58,9 +58,18 @@ class Product(Base):
     service:Mapped[int] = mapped_column(ForeignKey("service.id",ondelete="CASCADE",onupdate="CASCADE"))
 
 
+class Chat(Base):
+    __tablename__ = "chat"
+    id:Mapped[int] = mapped_column(primary_key=True)
+    user:Mapped[int] = mapped_column(ForeignKey("users.id",ondelete="CASCADE",onupdate="CASCADE"))
+    user_:Mapped[int] = mapped_column(ForeignKey("users.id",ondelete="CASCADE",onupdate="CASCADE"))
+    __table_args__ = (UniqueConstraint(user,user_),)
+
+
 class Message(Base):
     __tablename__ = "message"
-    list_display = ["message","user_id","chat_id"]
+    list_display = ["message","chat_id"]
+    id:Mapped[int] = mapped_column(primary_key=True)
     message:Mapped[str] = mapped_column(String(1000))
-    user:Mapped[int] = mapped_column(ForeignKey("users.id",ondelete="CASCADE",onupdate="CASCADE"),primary_key=True)
-    user_:Mapped[int] = mapped_column(ForeignKey("users.id",ondelete="CASCADE",onupdate="CASCADE"),primary_key=True)
+    chat_id:Mapped[int] = mapped_column(ForeignKey("chat.id",ondelete="CASCADE",onupdate="CASCADE"))
+    user:Mapped[int] = mapped_column(ForeignKey("users.id",ondelete="CASCADE",onupdate="CASCADE"))

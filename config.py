@@ -13,7 +13,7 @@ class Config:
         "type_service":[[k_ for k_,v_ in v.columns.items()] for k,v in TypeService.metadata.tables.items() if v.name == "type_service"],
         "title_service":[[k_ for k_,v_ in v.columns.items()] for k,v in TitleService.metadata.tables.items() if v.name == "title_service"],
         "service":[[k_ for k_,v_ in v.columns.items()] for k,v in Service.metadata.tables.items() if v.name == "service"],
-        "users":[[k_ for k_,v_ in v.columns.items()] for k,v in Service.metadata.tables.items() if v.name == "users"]
+        "users":[[k_ for k_,v_ in v.columns.items() if k_ in  Users.list_display and k_ != "hash_password"] for k,v in Service.metadata.tables.items() if v.name == "users"]
         }
     
     MODELS_CRUD = {

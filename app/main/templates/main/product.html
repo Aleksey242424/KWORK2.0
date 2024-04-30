@@ -20,7 +20,7 @@
                     <p>Услуга: {{current_product[0][1].service}}</p>
                     <p id="description">{{current_product[0][0].info}}</p>
                     {%if current_user.is_customer%}
-                    <a href="{{url_for()}}">Написать</a>
+                    <a href="{{url_for('main.before_message',user_id=current_product[0][0].user)}}">Написать</a>
                     {%endif%}
                 </div>
             </div>

@@ -8,5 +8,7 @@ password: 123
 '''
 
 if __name__ == "__main__":
-    app = create_app()
-    app.run()
+    data = create_app()
+    app = data[0]
+    socketio = data[1]
+    socketio.run(app)

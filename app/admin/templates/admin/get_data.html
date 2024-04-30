@@ -5,8 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Update Data</title>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" defer></script>
+    <link rel="stylesheet" href="{{url_for('static',filename='css/get_data.css')}}">
 </head>
 <body>
+    <div class="main">
     <a href="{{url_for('admin.main')}}">tables</a> > 
     <a href="{{url_for('admin.table',tablename=tablename)}}">{{tablename}}</a>
     <form action="{{url_for('admin.get_data',tablename=tablename,instance_id=instance_id)}}" method="post" novalidate id="main_form">
@@ -28,6 +30,7 @@
     <form action="{{url_for('admin.get_data',tablename=tablename,instance_id=instance_id)}}" method="post" novalidate>
         <input type="submit" value="delete" name="delete">
     </form>
+    </div>
     <script>
         function wrapeSelect(select){
             console.log(select.value)
