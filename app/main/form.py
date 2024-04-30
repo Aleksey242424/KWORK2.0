@@ -26,3 +26,7 @@ class FilterForm(FlaskForm):
     wrape_select_service = SelectField(label='service',choices=[(data.id,data.service) for data in ServiceCRUD.get_fk_data(title_service_id)])
     start_price = IntegerField(label="price",render_kw={"placeholder":"от","oninput":"generateProduct()"})
     end_price = IntegerField(label="price",render_kw={"placeholder":"до","oninput":"generateProduct()"})
+
+class ChatMessageForm(FlaskForm):
+    message = StringField(label="message",render_kw={"placeholder":"message"},validators=[DataRequired(),Length(1,1000)])
+    

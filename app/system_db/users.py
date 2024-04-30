@@ -21,6 +21,7 @@ class UsersCRUD(BasicCRUD):
                 db_session.commit()
                 return True
             except IntegrityError as ex:
+                print(ex)
                 return 
 
     @staticmethod

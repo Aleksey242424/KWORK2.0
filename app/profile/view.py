@@ -5,6 +5,7 @@ from app.system_db.product import ProductCRUD
 from app.system_db.type_service import TypeServiceCRUD
 from app.profile.form import UpdateProfileForm,update_product
 from app.profile.controller import generate_select_title_service_html,generate_select_service_html
+from app.redis.cache_history import get_history
 
 
 @profile.route("/")
@@ -17,7 +18,7 @@ def profile_page():
             return redirect(url_for("profile.executor_profile"))
     return redirect(url_for("auth.login"))
 
-@profile.route("/customer/")
+@profile.route("/customer/",methods={"GET","POST"})
 def customer_profile():
     if session.get("id"):
         current_user = UsersCRUD.get(session.get("id"))
@@ -25,8 +26,11 @@ def customer_profile():
             form = UpdateProfileForm()
             if form.validate_on_submit():
                 params = {k:v for k,v in request.form.items()}
-                UsersCRUD.update(current_user.id,**params,)
-            return render_template("profile/customer_profile.html",current_user=current_user,form=form)
+                if not UsersCRUD.update_from_profile(current_user.id,**params,):
+                    flash("Пользователь с такими данными уже зарегестрирован")
+                return redirect(url_for("profile.customer_profile"))
+            history_products = get_history(current_user.id)
+            return render_template("profile/customer_profile.html",current_user=current_user,form=form,history_products=history_products)
         return redirect(url_for("main.main_page"))
     return redirect(url_for("auth.login"))
 
@@ -52,7 +56,7 @@ def executor_profile():
 def user_product(id):
     if session.get("id"):
         current_user = UsersCRUD.get(session.get("id"))
-        current_product = ProductCRUD.get_from_profile(id)
+        current_product = ProductCRUD.get_for_users(id)
         if not current_user.is_customer and current_user.id == current_product[0][0].user:
             service_id = current_product[0][1].id
             title_service_id = current_product[0][2].id

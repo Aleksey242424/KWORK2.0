@@ -11,6 +11,8 @@ a{
 
 body{
     background-color: #B80028;
+}
+.body{
     display: flex;
     align-items: center;
     justify-content: center;

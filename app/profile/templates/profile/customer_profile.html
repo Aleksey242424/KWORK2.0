@@ -1,13 +1,78 @@
+{% extends 'profile/basic.html' %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {%block head%}
     <title>Profile</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='css/profile.css')}}">
+    {%endblock%}
 </head>
 <body>
-    {{current_user.name}}
-    {{current_user.email}}
-    {{current_user.phone}}
+    {%block header%}
+    <div class="main">
+        {%with messages = get_flashed_messages()%}
+        {{messages[0]}}
+        {%endwith%}
+        <div class="form">
+            <form action="{{url_for('profile.customer_profile')}}" method="post" novalidate style="display: none;" id="update_form">
+                {{form.hidden_tag()}}
+                {{form.csrf_token()}}
+                {{form.name(value=current_user.name)}}
+                {{form.email(value=current_user.email)}}
+                {{form.phone(value=current_user.phone)}}
+                <input type="submit" value="update">
+            </form>
+            <button id="update_profile" onclick="updateProfile()">Обновить данные профиля</button>
+        </div>
+        <div class="history">
+            {%for product in history_products%}
+            <a href="{{url_for('main.product',id=product[-1])}}">
+                <div class="product_block">
+                    <img src="{{url_for('static',filename=product[2])}}" width="300px" height="200px">
+                    <div>
+                        <p>{{product[-2]}}</p><br>
+                        <p>цена: {{product[-3]}} ₽</p><br>
+                        <p>{{product[1]}}</p>
+                    </div>
+                </div>
+            </a>
+            {%endfor%}
+        </div>
+    </div>
+    <script>
+        let stateUpdateProfile = false
+        function validatorPhone(){
+            let phone = document.getElementById("phone")
+            document.addEventListener('keydown', function(event) {
+            if (event.code == 'Backspace') {
+                phone.readOnly = false;
+            }
+            });
+            if (phone.value.length >= 11){
+                while (phone.value.length > 11){
+                    phone.value = phone.value.slice(0,-1)
+                }
+                phone.readOnly = true;
+            }
+            
+            
+        }
+        function updateProfile(){
+            const updateProfileForm = document.getElementById("update_form")
+            const updateProfileButton = document.getElementById("update_profile")
+            if (stateUpdateProfile){
+                updateProfileButton.textContent = "Обновить данные профиля"
+                stateUpdateProfile = false
+                updateProfileForm.style.display = "none"
+                updateProfileButton.style.position = "relative"
+            }else{
+                updateProfileButton.textContent = "Отмена"
+                stateUpdateProfile = true
+                updateProfileForm.style.display = "flex"
+                updateProfileButton.style.position = "fixed"
+            }
+        }
+    </script>
+    {%endblock%}
 </body>
 </html>

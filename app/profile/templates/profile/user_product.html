@@ -1,44 +1,47 @@
+{%extends 'profile/basic.html'%}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Products</title>
+    {% block head %}
+    <title>Product</title>
     <link rel="stylesheet" href="{{url_for('static',filename='css/user_product.css')}}">
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" defer></script>
+    {% endblock %}
 </head>
 <body>
-    <div class="main">
-        <div>
-            <img src="{{url_for('static',filename=current_product[0][0].photo)}}" width="300px" height="200px">
-            <div id="block_data">
-                {%if current_user.id == current_product[0][0].user%}
-                <div>
-                    <button id="update_product_button" onclick="updateForm()">изменить</button>
-                    <form action="{{url_for('profile.user_product',id=current_product[0][0].id)}}" method="post" novalidate style="display: none;" id="update_product">
-                        {{form.hidden_tag()}}
-                        {{form.csrf_token()}}
-                        {{form.title(value=current_product[0][0].title)}}
-                        {{form.info()}}
-                        {{form.price(value=current_product[0][0].price)}}
-                        <div>
-                            {{form.type_service()}}
-                            <div id="wrape_select" style="display: inline;">
-                                {{form.title_service()}}
+    {% block header %}
+    <div class="body">
+        <div class="main">
+            <div>
+                <img src="{{url_for('static',filename=current_product[0][0].photo)}}" width="300px" height="200px">
+                <div id="block_data">
+                    {%if current_user.id == current_product[0][0].user%}
+                    <div>
+                        <button id="update_product_button" onclick="updateForm()">изменить</button>
+                        <form action="{{url_for('profile.user_product',id=current_product[0][0].id)}}" method="post" novalidate style="display: none;" id="update_product">
+                            {{form.hidden_tag()}}
+                            {{form.csrf_token()}}
+                            {{form.title(value=current_product[0][0].title)}}
+                            {{form.info()}}
+                            {{form.price(value=current_product[0][0].price)}}
+                            <div>
+                                {{form.type_service()}}
+                                <div id="wrape_select" style="display: inline;">
+                                    {{form.title_service()}}
+                                </div>
+                                <div id="wrape_select_service" style="display: inline;">
+                                    {{form.wrape_select_service()}}
+                                </div>
                             </div>
-                            <div id="wrape_select_service" style="display: inline;">
-                                {{form.wrape_select_service()}}
-                            </div>
-                        </div>
-                        <input type="submit" value="update">
-                    </form>
+                            <input type="submit" value="update">
+                        </form>
+                    </div>
+                    {%endif%}
+                    <p>{{current_product[0][0].title}}</p>
+                    <p>цена: {{current_product[0][0].price}} ₽</p>
+                    <p>Тип: {{current_product[0][2].title_service}}</p>
+                    <p>Услуга: {{current_product[0][1].service}}</p>
+                    <p id="description">{{current_product[0][0].info}}</p>
                 </div>
-                {%endif%}
-                <p>{{current_product[0][0].title}}</p>
-                <p>цена: {{current_product[0][0].price}} ₽</p>
-                <p>Тип: {{current_product[0][2].title_service}}</p>
-                <p>Услуга: {{current_product[0][1].service}}</p>
-                <p id="description">{{current_product[0][0].info}}</p>
             </div>
         </div>
     </div>
@@ -135,5 +138,6 @@
             }
         }
     </script>
+    {% endblock %}
 </body>
 </html>

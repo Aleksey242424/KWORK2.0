@@ -1,0 +1,31 @@
+{%extends 'main/basic.html'%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block head %}
+    <title>Product</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='css/user_product.css')}}">
+    {% endblock %}
+</head>
+<body>
+    {% block header %}
+    <div class="body">
+        <div class="main">
+            <div>
+                <img src="{{url_for('static',filename=current_product[0][0].photo)}}" width="300px" height="200px">
+                <div id="block_data">
+                    <p>{{current_product[0][0].title}}</p>
+                    <p>цена: {{current_product[0][0].price}} ₽</p>
+                    <p>Тип: {{current_product[0][2].title_service}}</p>
+                    <p>Услуга: {{current_product[0][1].service}}</p>
+                    <p id="description">{{current_product[0][0].info}}</p>
+                    {%if current_user.is_customer%}
+                    <a href="{{url_for()}}">Написать</a>
+                    {%endif%}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+</body>
+</html>

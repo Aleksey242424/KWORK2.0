@@ -1,15 +1,14 @@
+{%extends 'profile/basic.html'%}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block head %}
     <title>Profile</title>
     <link rel="stylesheet" href="{{url_for('static',filename='css/profile.css')}}">
-    <style>
-        
-    </style>
+    {% endblock %}
 </head>
 <body>
+    {% block header %}
     <div class="main">
         {%with messages = get_flashed_messages()%}
         {{messages[0]}}
@@ -75,5 +74,6 @@
             }
         }
     </script>
+    {% endblock %}
 </body>
 </html>

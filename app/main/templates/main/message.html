@@ -1,0 +1,15 @@
+{%extends 'main/basic.html'%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Message</title>
+</head>
+<body>
+    <form action="{{url_for('main.message')}}" method="post" novalidate>
+        {{form.hidden_tag()}}
+        {{form.csrf_token()}}
+        {{form.message()}}
+        <input type="submit" value="send">
+    </form>
+</body>
+</html>

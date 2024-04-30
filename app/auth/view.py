@@ -22,14 +22,15 @@ def login():
 def register():
     if session.get("id")  is None:
         form = RegisterForm()
-        if form.validate_on_submit() and form.phone.data.isdigit():
+        if form.validate_on_submit():
+            if not form.phone.data.isnumeric():
+                flash("Данные не коректны")
+                return redirect(url_for("auth.register"))
             params = {k:v for k,v in request.form.items()}
             if UsersCRUD.add(**params,):
                 session["id"] = UsersCRUD.get_instance(username=params["name"],password=params["hash_password"]).id
                 return redirect(url_for("main.main_page"))
             flash("Пользователь с такими данными уже зарегестрирован")
-            return redirect(url_for("auth.register"))
-        if form.errors:
-            flash("Данные не коректны")
+            return redirect(url_for("auth.register"))            
         return render_template("auth/register.html",form=form)
     return redirect(url_for("main.main_page"))

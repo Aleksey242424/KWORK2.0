@@ -3,8 +3,9 @@ from app.system_db import db_session,Base
 from sqlalchemy import text
 from pydantic import validate_call
 from app.system_db.basic import BasicCRUD
-from werkzeug.security import generate_password_hash,check_password_hash
+from werkzeug.security import check_password_hash
 from sqlalchemy.exc import IntegrityError
+from app.redis.cache_product import add_product,update_product
 
 class ProductCRUD(BasicCRUD):
     @staticmethod
@@ -20,6 +21,9 @@ class ProductCRUD(BasicCRUD):
                     service = params.get("wrape_select_service")
                     ))
                 db_session.commit()
+                last_id = ProductCRUD.get_last_id()
+                product_data = ProductCRUD.get_for_users(last_id[0])
+                add_product(product_id=product_data[0][0].id,product_title=product_data[0][0].title,product_price=product_data[0][0].price,product_photo=product_data[0][0].photo,service = product_data[0][1].service,title_service = product_data[0][2].title_service)
                 return True
             except IntegrityError as ex:
                 print(ex)
@@ -30,12 +34,16 @@ class ProductCRUD(BasicCRUD):
         with db_session() as session:
             session.query(Product).filter_by(id=id).update({"title":params.get("title"),"price":params.get("price"),"photo":params.get("photo"),"user":params.get("user")})
             db_session.commit()
+            
+            
 
     @staticmethod
     def update_for_user(id,**params):
         with db_session() as session:
             session.query(Product).filter_by(id=id).update({"title":params.get("title"),"price":params.get("price"),"info":params.get("info"),"service":params.get("wrape_select_service")})
             db_session.commit()
+            product_data = ProductCRUD.get_for_users(id)
+            update_product(product_id=product_data[0][0].id,product_title=product_data[0][0].title,product_price=product_data[0][0].price,service = product_data[0][1].service,title_service = product_data[0][2].title_service)
 
     @staticmethod
     def get(id):
@@ -44,13 +52,27 @@ class ProductCRUD(BasicCRUD):
             return product
         
     @staticmethod
-    def get_from_profile(id):
+    def get_last_instance():
+        with db_session() as session:
+            product = session.query(Product).order_by(Product.id.desc()).first()
+            return product
+        
+    @staticmethod
+    def get_last_id():
+        with db_session() as session:
+            last_id = session.query(Product.id).order_by(Product.id.desc()).first()
+            return last_id
+
+    @staticmethod
+    def get_for_users(id):
         with db_session() as session:
             product = session.query(Product,Service,TitleService).join(
                 Service,Product.service==Service.id).join(
                     TitleService,Service.title_service_id == TitleService.id).filter(
                     Product.id==id).all()
             return product
+        
+    
         
     @staticmethod
     def get_all_by_service(service_id):
@@ -127,7 +149,6 @@ class ProductCRUD(BasicCRUD):
     @staticmethod
     def get_product_by_price_and_service(service_id,start_price="",end_price=""):
         with db_session() as session:
-            print(service_id)
             if end_price and start_price:
                 product = session.query(Product).filter(Product.price>=start_price,Product.price<=end_price,Product.service==service_id).all()
             elif end_price:

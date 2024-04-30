@@ -56,3 +56,11 @@ class Product(Base):
     price:Mapped[int] = mapped_column(Integer)
     user:Mapped[int] = mapped_column(ForeignKey("users.id",ondelete="CASCADE",onupdate="CASCADE"))
     service:Mapped[int] = mapped_column(ForeignKey("service.id",ondelete="CASCADE",onupdate="CASCADE"))
+
+
+class Message(Base):
+    __tablename__ = "message"
+    list_display = ["message","user_id","chat_id"]
+    message:Mapped[str] = mapped_column(String(1000))
+    user:Mapped[int] = mapped_column(ForeignKey("users.id",ondelete="CASCADE",onupdate="CASCADE"),primary_key=True)
+    user_:Mapped[int] = mapped_column(ForeignKey("users.id",ondelete="CASCADE",onupdate="CASCADE"),primary_key=True)

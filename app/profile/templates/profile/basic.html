@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block script %}<script src="https://code.jquery.com/jquery-3.7.1.min.js" defer></script>{% endblock %}
+    {% block style %}<link rel="stylesheet" href="{{url_for('static',filename='css/basic.css')}}">{% endblock %}
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <header>
+        {%if current_user.is_customer %}
+        <div>
+            <a href="{{url_for('profile.customer_profile')}}">profile</a>
+            {%if request.path != '/'%}
+            <a href="{{url_for('main.main_page')}}">main</a>
+            {%endif%}
+        </div>
+        {%else%}
+        <div>
+            {%if request.path != '/profile/executor/'%}
+            <a href="{{url_for('profile.executor_profile')}}">profile</a>
+            {%endif%}
+            {%if request.path != '/create_product/'%}
+            <a href="{{url_for('main.create_product')}}">create product</a>
+            {%endif%}
+            {%if request.path != '/'%}
+            <a href="{{url_for('main.main_page')}}">main</a>
+            {%endif%}
+        </div>
+        {%endif%}
+    </header>
+    {% block header %}{% endblock %}
+</body>
+</html>
