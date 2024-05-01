@@ -1,4 +1,4 @@
-админка по маршруту admin ;)
+админка по маршруту admin ;)\
 sign in admin panel:\ 
 username:Aleksey\
 password:123\
