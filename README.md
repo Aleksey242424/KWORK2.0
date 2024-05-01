@@ -2,4 +2,4 @@
 service postgresql start\
 service redis-server start\
 source venv/Scripts/activate\
-python main.py\
+python main.py
